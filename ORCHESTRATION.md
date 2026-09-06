@@ -14,7 +14,8 @@ decisions; workers execute bounded tasks and report results.
    - `task`: "Read /workspace/multiagent/tasks/<runid>/<file>.md, execute it
      exactly, write your output where the spec says, REPLACE the ## Result
      placeholder in the file with your actual result."
-   - `system_prompt`: the roster prompt for its role
+   - `agent`: the profile name for its role (builder / critic / researcher /
+     planner / merger — see PROFILES.md). Do NOT pass `system_prompt`.
    - `tools`: only what the role needs
    - `label`: `<runid>:<role>-<NN>`
    - Concurrency: ≤3 parallel by default (raise only with user consent; global cap 16).
@@ -55,6 +56,12 @@ sub-agent critic or a deliberate self-review against the spec, stated explicitly
   `## Result` section; nothing depends on in-place edits elsewhere.
 - **Statelessness**: never assume a worker remembers anything; every dispatch
   re-states the file paths and the format.
+- **Scaffold before dispatch (hard ordering)**: `tasks/<runid>/` with RUN.md
+  and all task files must exist on disk BEFORE any `subagent_dispatch` call.
+  Run 20260906-b2 dispatched from session memory; when every run was cut by
+  the turn budget, there was no spec or audit trail to recover from. RUN.md
+  is the orchestrator's write-ahead log: write the dispatch line before
+  dispatching, update the status after.
 
 ## D. State hygiene
 
@@ -72,7 +79,9 @@ Run when the system is installed or after harness changes:
    `02-builder.md`, `03-builder.md`. Each spec: compute one distinct arithmetic
    result (e.g. 17×23, 2^12−1, sum of primes <30) and write it to
    `tasks/smoke-<date>/out-<NN>.md` with the role name and result.
-2. Dispatch the three builders in parallel (single block).
+2. Dispatch the three builders in parallel (single block, `agent="builder"`).
+   Also dispatch one 1-trip probe (`agent="builder"`, task = reply PROFILOK,
+   timeout 90) to confirm profile resolution still works after app updates.
 3. Verify all three output files exist with correct arithmetic (orchestrator
    recomputes).
 4. Dispatch one `critic` over the three specs + outputs.

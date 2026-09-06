@@ -18,7 +18,9 @@ Quick dispatch shape for a worker:
 - task: "Read /workspace/multiagent/tasks/<runid>/<NN>-<role>.md, execute it
   exactly, write output where the spec says, REPLACE the ## Result placeholder
   in the file with your actual result."
-- system_prompt: the role's prompt from CONTRACT.md
+- agent: the profile name for the role (builder / critic / researcher / planner
+  / merger). Deployed prompts + engine facts: `/workspace/multiagent/PROFILES.md`.
+  Do NOT pass system_prompt (ignored by the engine).
 - tools: only what the role needs
 - label: "<runid>:<role>-<NN>"
 - parallel builders go out in ONE block; ≤3 concurrent by default

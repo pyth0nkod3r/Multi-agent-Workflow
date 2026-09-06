@@ -55,8 +55,12 @@ to the user with the best attempt + the specific unresolved issues. No infinite 
 
 ## The Roster
 
-Each role = a system prompt + a fixed output format. Roles are defined here, kept
-short, and passed as `system_prompt` to `subagent_dispatch`.
+Each role = a system prompt + a fixed output format. The canonical prompt text
+lives in `roster/<role>.md` and is deployed as a RikkaHub **sub-agent profile**
+(see PROFILES.md). Dispatch by name: `subagent_dispatch(agent="builder", ...)`.
+NEVER pass `system_prompt` per dispatch — the engine ignores it (verified in
+SubAgentEngine.kt). One-off personas that don't merit a profile put their role
+rules inline in the task text instead.
 
 ### researcher
 - Scope: web reading/extraction, source gathering. Tools: web_fetch/web_extract/firecrawl.
