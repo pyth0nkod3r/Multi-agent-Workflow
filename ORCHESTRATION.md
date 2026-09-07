@@ -41,6 +41,31 @@ decisions; workers execute bounded tasks and report results.
 Solo execution, but with one cold critic pass before reporting done — either a
 sub-agent critic or a deliberate self-review against the spec, stated explicitly.
 
+## B2. Sizing and checkpoints (v2 — anti-death rules)
+
+Workers die when runs exceed budget or the parent turn ends; runs are
+in-memory and NOT resumable. These rules make every run survivable:
+
+- **Unit sizing**: one dispatch = ≤30 minutes of worker work INCLUDING
+  verification. Large builds / suites are staged units chained with Depends
+  (prepare → build → verify), never one monolithic unit.
+- **Checkpoint-or-die**: workers must write partial output to disk after every
+  step (builder/researcher/merger prompts v2 enforce this). Orchestrator-side:
+  never hold plan or RUN.md updates in memory — write them immediately.
+- **Background long commands**: any command expected over ~2 minutes runs
+  detached (workspace_run_background / background:true) and is polled. A
+  foreground wait on a build is the #1 cause of budget death (vite ~1m50s
+  killed a turn; vitest+build in one turn killed another).
+- **Timeout per dispatch**: always set `timeout_seconds` explicitly. Default
+  300 is right for small units; 600–900 for build-heavy ones. Max 1800.
+- **Early-stop**: if a worker nears ~60% of its budget it must stop, checkpoint,
+  and hand off a status paragraph. The orchestrator treats a clean partial as
+  a success and re-dispatches a continuation unit referencing the partial.
+- **Recovery protocol (parent turn dies)**: on the next turn, read
+  `tasks/<runid>/RUN.md` + the task files' `## Result` sections from disk,
+  mark each unit done/partial/not-started, then re-dispatch only what's
+  missing. Never re-plan from memory.
+
 ## C. Failure design (from MindStudio, adapted)
 
 - **Timeout**: `subagent_dispatch` has `timeout_seconds`; set per unit (default 600).
@@ -54,6 +79,11 @@ sub-agent critic or a deliberate self-review against the spec, stated explicitly
   orchestrator holds them until the dependency's `## Result: done` exists.
 - **Partial completion**: task files are idempotent — a re-dispatch REPLACES the
   `## Result` section; nothing depends on in-place edits elsewhere.
+- **Resume-by-default (v2)**: before re-dispatching a failed/partial unit, the
+  orchestrator reads the spec's output area on disk and records in RUN.md what
+  is already done. The re-dispatch task text states: "partial work exists at
+  <path>; read it, verify against done criteria, continue from the last
+  checkpoint — do not redo completed steps."
 - **Statelessness**: never assume a worker remembers anything; every dispatch
   re-states the file paths and the format.
 - **Scaffold before dispatch (hard ordering)**: `tasks/<runid>/` with RUN.md
