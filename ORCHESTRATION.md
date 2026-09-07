@@ -24,14 +24,30 @@ decisions; workers execute bounded tasks and report results.
      must be reconstructable from RUN.md alone (observability / audit trail).
    - Tournament units (CONTRACT Rule 2): dispatch 2–3 variant builders for the
      SAME unit, deliberately different approaches.
-4. **Collect** — read each task file's `## Result`. Blocked/failed units are
+4. **Watchdog (mandatory, v2)** — immediately after the last dispatch of a
+   wave, schedule a one-shot `llm` job (`schedule_job`, `schedule_type: once`,
+   name `watchdog-<runid>-<wave>`) to fire at (longest unit's timeout_seconds)
+   + 5 min, minimum +15 min. The prompt must be SELF-CONTAINED (the job runs
+   in a fresh turn): run id, `tasks/<runid>/` paths, instruction to read
+   RUN.md + every task file's `## Result` from disk, then:
+   - dispatched-but-unfinished unit → re-dispatch it ONCE via
+     `subagent_dispatch` (same profile, resume wording: "partial work may
+     exist at <output path>; read it, continue from the last checkpoint,
+     never redo completed steps");
+   - unit still actively working (fresh RUN.md timestamps) → do nothing,
+     schedule one more watchdog check +15 min;
+   - all units done → append final status to RUN.md and stop;
+   - a unit already re-dispatched once and failed again → escalate to the
+     user, do not loop.
+   Record the job name in RUN.md. One-shot jobs self-expire — no cleanup.
+5. **Collect** — read each task file's `## Result`. Blocked/failed units are
    re-dispatched once with the failure appended; second failure = escalate.
-5. **Critique** — dispatch a `critic` blind: give it the spec paths + output paths,
+6. **Critique** — dispatch a `critic` blind: give it the spec paths + output paths,
    never builder identities or the run history. In tournament units the critic
    ranks the variants side by side and names a winner.
-6. **Merge** — `merger` (or the orchestrator for small merges) combines into
+7. **Merge** — `merger` (or the orchestrator for small merges) combines into
    `runs/<runid>-final.md` and applies the critic's blockers first.
-7. **Report** — to the user: what ran, what the critic said, where the output is.
+8. **Report** — to the user: what ran, what the critic said, where the output is.
    Restate actual verification performed. Before reporting, apply the self-rating
    gate (CONTRACT Rule 3): rate the merged result 1–10 against the goal; a "no"
    means fix it first, don't report yet.
@@ -65,6 +81,13 @@ in-memory and NOT resumable. These rules make every run survivable:
   `tasks/<runid>/RUN.md` + the task files' `## Result` sections from disk,
   mark each unit done/partial/not-started, then re-dispatch only what's
   missing. Never re-plan from memory.
+- **Next-message recovery (mandatory, v2)**: at the start of ANY user
+  message, if any run directory under `tasks/` contains dispatch lines
+  without a final status in RUN.md, or task files with unfilled `## Result`
+  placeholders, scan it FIRST, re-dispatch partial units with resume
+  wording, and report run status alongside the user's request. A user
+  message is a free recovery trigger — never waste it. (Complements the
+  §A watchdog, which fires on a timer; this fires on the user's next ping.)
 
 ## C. Failure design (from MindStudio, adapted)
 

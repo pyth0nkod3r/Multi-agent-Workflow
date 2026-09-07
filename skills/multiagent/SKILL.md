@@ -25,6 +25,13 @@ Quick dispatch shape for a worker:
 - label: "<runid>:<role>-<NN>"
 - parallel builders go out in ONE block; ≤3 concurrent by default
 
+v2 recovery (ORCHESTRATION §A step 4 + §B2):
+- MANDATORY after every dispatch wave: schedule a one-shot watchdog `llm` job
+  (longest unit timeout + 5 min, min +15 min) that reads RUN.md + task files
+  from disk and re-dispatches cut-off units with resume wording.
+- MANDATORY at the start of any user message: scan tasks/ for active runs with
+  unfilled ## Result placeholders and recover them BEFORE handling the request.
+
 Hard limits: max 3 critic/revision iterations, then escalate to the user.
 Never let a worker decide workflow direction — the orchestrator does that.
 
