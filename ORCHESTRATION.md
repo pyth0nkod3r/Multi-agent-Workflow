@@ -24,21 +24,28 @@ decisions; workers execute bounded tasks and report results.
      must be reconstructable from RUN.md alone (observability / audit trail).
    - Tournament units (CONTRACT Rule 2): dispatch 2–3 variant builders for the
      SAME unit, deliberately different approaches.
-4. **Watchdog (mandatory, v2)** — immediately after the last dispatch of a
+4. **Watchdog (mandatory, v3)** — immediately after the last dispatch of a
    wave, schedule a one-shot `llm` job (`schedule_job`, `schedule_type: once`,
    name `watchdog-<runid>-<wave>`) to fire at (longest unit's timeout_seconds)
    + 5 min, minimum +15 min. The prompt must be SELF-CONTAINED (the job runs
    in a fresh turn): run id, `tasks/<runid>/` paths, instruction to read
-   RUN.md + every task file's `## Result` from disk, then:
-   - dispatched-but-unfinished unit → re-dispatch it ONCE via
-     `subagent_dispatch` (same profile, resume wording: "partial work may
-     exist at <output path>; read it, continue from the last checkpoint,
-     never redo completed steps");
+   RUN.md + every task file's `## Result` + CHECK OUTPUT FILES on disk
+   (SUCCEEDED ≠ done), then:
+   - dispatched-but-unfinished unit → DO NOT attempt `subagent_dispatch`:
+     headless runs (cron / workflow) are hard-blocked by the no_recursion
+     guard ("run the work inline instead" — verified live 20260907-1630-
+     watchdog-test, ERR-20260907-002). Instead: append findings to RUN.md
+     (which units are cut off, what's missing on disk) and post a short
+     notification to the user, so the next interactive message triggers
+     next-message recovery (§B2) — THAT path re-dispatches ONCE with resume
+     wording: "partial work may exist at <output path>; read it, continue
+     from the last checkpoint, never redo completed steps". Optionally
+     schedule one more watchdog +15 min as a second reminder.
    - unit still actively working (fresh RUN.md timestamps) → do nothing,
      schedule one more watchdog check +15 min;
-   - all units done → append final status to RUN.md and stop;
-   - a unit already re-dispatched once and failed again → escalate to the
-     user, do not loop.
+   - all units done (disk-verified) → append final status to RUN.md and stop;
+   - a unit already re-dispatched once (by interactive recovery) and failed
+     again → escalate to the user, do not loop.
    Record the job name in RUN.md. One-shot jobs self-expire — no cleanup.
 5. **Collect** — read each task file's `## Result`. Blocked/failed units are
    re-dispatched once with the failure appended; second failure = escalate.
@@ -88,6 +95,9 @@ in-memory and NOT resumable. These rules make every run survivable:
   wording, and report run status alongside the user's request. A user
   message is a free recovery trigger — never waste it. (Complements the
   §A watchdog, which fires on a timer; this fires on the user's next ping.)
+  This is also THE re-dispatch path for §A watchdog escalations: the headless
+  watchdog detects cut-offs and notifies (it cannot dispatch — no_recursion);
+  recovery here does the actual re-dispatch.
 
 ## C. Failure design (from MindStudio, adapted)
 
