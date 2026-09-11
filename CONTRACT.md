@@ -96,6 +96,9 @@ rules inline in the task text instead.
   or ambiguity is a FAIL, never a charitable pass. In tournament mode, rank all
   variants blind, side by side, and name a winner.
 
+### designer
+Design-side executor for ai-design-workflow Phase 1-3 (pen flows, Stitch screens, direction briefs, DESIGN.md). Roster: roster/designer.md. Same hard rules as builder; design-specific discipline in that file.
+
 ### merger
 - Scope: combine parallel outputs into one coherent artifact; resolve conflicts,
   deduplicate, enforce one voice. Output written to `runs/`.

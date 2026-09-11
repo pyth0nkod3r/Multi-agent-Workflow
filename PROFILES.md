@@ -6,7 +6,7 @@ stored app-side (DataStore). This file + `roster/` are the canonical copies.
 ## Canonical vs deployed
 - `roster/<role>.md` body (everything after the `# ` header line) = the exact
   system prompt deployed into the profile of the same name.
-- Deployed set (v2, 2026-09-07): builder, critic, researcher, planner, merger. v2 = hard checkpoint/resume rules (checkpoint after every step, <2min foreground commands + background for long jobs, 60% early-stop, resume-by-default).
+- Deployed set (v3, 2026-09-11): builder, critic, designer, researcher, planner, merger. v2 hard rules carry into v3; designer added for ai-design-workflow Phase 1-3 units. v2 = hard checkpoint/resume rules (checkpoint after every step, <2min foreground commands + background for long jobs, 60% early-stop, resume-by-default).
 - When a prompt evolves: edit roster/*.md FIRST, then re-deploy (below), then
   bump the version line in the roster file header. Never edit only one side.
 
