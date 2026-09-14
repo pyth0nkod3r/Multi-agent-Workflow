@@ -98,6 +98,17 @@ in-memory and NOT resumable. These rules make every run survivable:
   This is also THE re-dispatch path for §A watchdog escalations: the headless
   watchdog detects cut-offs and notifies (it cannot dispatch — no_recursion);
   recovery here does the actual re-dispatch.
+- **Wave quality gating (v4, 2026-09-14)**: a unit is session-verified only
+  when (a) ## Result filled, (b) output files on disk, (c) QA clean for
+  touched paths, (d) targeted tests green. QA-clean means: no NEW lint
+  findings on touched paths and zero ERRORS on touched paths (pre-existing
+  errors on a touched file are fixed by the touching unit; pre-existing
+  warnings are fixed or one-line-justified in the repo's quality ledger —
+  e.g. platform/docs/quality-ledger.md). The orchestrator runs QA inline
+  (seconds) as part of wave-gate verification; gates + commands:
+  /workspace/multiagent/knowledge/code-quality.md. Rationale: 61% of
+  agentic PRs are merged with minimal review (arXiv 2601.16839) — this
+  check is the counter-gate.
 
 ## C. Failure design (from MindStudio, adapted)
 
