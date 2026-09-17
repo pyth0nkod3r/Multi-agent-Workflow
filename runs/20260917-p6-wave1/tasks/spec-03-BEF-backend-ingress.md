@@ -58,4 +58,14 @@ ingress.py → tests → adapters/ETL → endpoint → full QA → "## Result".
 Never >1 step unwritten.
 
 ## Result
-(built by — orchestrator fills after disk verification)
+BUILT INLINE by orchestrator 19 Sept 2026 (builders fast-fail died — 10th consecutive engine death).
+- services/ingress.py: adapters (arbeitnow/freehire via httpx — IS available
+  in backend; urllib fallback), shared normalize shape, raw_ingress store
+  (lazy-init MockDB attr; PG CREATE TABLE IF NOT EXISTS — migration = P5-4
+  follow-up), ETL ingest (dedupe by URL, propagate to ALL owner spaces per
+  the seed-copy convention — u-admin-only landing made jobs invisible, caught
+  in build), mark_processed.
+- routers/portals.py: POST /portals/{id}/ingest (admin-only; ADAPTERS keyed by
+  REGISTRY ids 'arbeitnow'/'freehire' — my spec said '-search' ids, registry
+  is source of truth) + GET /admin/ingress (payload stripped).
+- tests/test_ingress.py: 8 cases. QA: 59/59 combined; ruff = B008 idioms only.

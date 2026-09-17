@@ -34,4 +34,10 @@ a separate file.
 client methods → panel component → admin wiring → test → QA → "## Result".
 
 ## Result
-(built by — orchestrator fills after disk verification)
+BUILT INLINE by orchestrator 19 Sept 2026 (builders fast-fail died — 10th consecutive engine death).
+- client.ts: ingestPortal + getIngressLog (dual-mode); types.ts IngressEntry.
+- pages/IngestionPanel.tsx: per-board "Ingest now" + raw-ingress log table
+  (source/fetchedAt/count/processed badge), empty-state copy, token-only
+  styling; wired into AdminShell as "Ingestion" tab (Database icon).
+- test/ingestion-panel.test.tsx: 3 cases (mocked api). QA: tsc 0, eslint
+  0 errors, vitest 55/55, prettier clean.

@@ -49,4 +49,19 @@ relevance.py → tests → fit.py wiring → render.yaml → full QA → "## Res
 Never >1 step unwritten.
 
 ## Result
-(built by — orchestrator fills after disk verification)
+BUILT INLINE by orchestrator 19 Sept 2026 (builders fast-fail died — 10th consecutive engine death).
+- services/relevance.py: score_bullet (deterministic keyword overlap +
+  weights), cut_cv loop (max 3 passes, lowest-scoring first, never raises —
+  caller decides residual policy).
+- fit.py: gate+cut extracted to module-level _gate_and_cut (C901 complexity
+  fix; endpoint <10). CV page-count failure → cut loop → recompile → re-gate
+  → residual note in 422 metrics. LAYOUT PROMOTION SCOPED: hard for the CV
+  (the loop can fix it); cover stays STAGED (thin letters are the drafter's
+  content problem — P7 real generation fixes; promotion there would 422 the
+  stub cover at 37% empty — caught in QA).
+- render.yaml: tectonic vendoring ALREADY existed (P5-1) — added the bundle
+  PRE-WARM canary compile (first real compile never hits CTAN);
+  DEPLOYMENT-CHECKLIST note.
+- tests: test_relevance_cut.py 6 cases; test_layout_findings → renamed
+  test_layout_gate_promoted_to_hard (CV-scoped). QA: 59/59 combined; ruff
+  clean on new files (PLR0913 noqa'd with reason on the callback-shaped APIs).

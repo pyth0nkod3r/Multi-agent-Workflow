@@ -32,3 +32,9 @@ Status:
 - [ ] Critic pass (attempt; engine fast-fail likely → inline self-review fallback)
 - [x] Critic PASS (inline self-verified — dispatched critic was 8th fast-fail death; verdict committed)
 - [x] Wave 2 session 1 dispatched: builder-BEF-backend (SPEC-03) + builder-BEF-panel (SPEC-04), background concurrent; SPEC-05 (BE-D) gated on session 1
+- [x] Wave 2 builders dispatched ×2 → fast-fail died (10th consecutive) → INLINE BUILD
+- [x] SPEC-03 BE-F backend: ingress.py (adapters+raw_ingress+ETL) + endpoints + 8 tests — registry-id alignment + all-owner propagation caught in build
+- [x] SPEC-04 BE-F panel: IngestionPanel.tsx + AdminShell tab + 3 tests — vitest 55/55
+- [x] SPEC-05 BE-D: relevance.py cut loop + _gate_and_cut extraction (C901 fix) + CV-layout-hard/cover-staged scoping + render.yaml pre-warm + 6 tests
+- [x] Committed platform f889952 (pushed); spec Results filled; ledger updated (staged policy retired for CV)
+- [ ] Critic attempt (engine fast-fail likely → inline fallback)
