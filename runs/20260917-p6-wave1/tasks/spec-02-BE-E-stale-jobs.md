@@ -54,4 +54,26 @@ Mixin fn + tests → router + tests → frontend → full QA → "## Result".
 Never >1 step unwritten.
 
 ## Result
-(built by — orchestrator fills after disk verification)
+BUILT INLINE by orchestrator 17 Sept 2026 (after 2 builder fast-fail deaths).
+- pg_mixins/jobs.py: LIVE_JOB_STATUSES ('new'+'active'), JOB_STALE_DAYS=14,
+  _age_days (naive/aware normalization — mock seeds are naive-UTC),
+  expire_stale_jobs (lazy on read), report_job_closed (instant flip +
+  _closedReport audit namespaced in gates JSONB — compromise documented,
+  proper column = P5-4 migration), reopen_job (cross-owner via find_job_owner —
+  SQL SELECT in PG, mock dict scan), _persist_job_fields (literal SQL only,
+  S608 gate; mock no-op).
+- routers/jobs.py: sweep wired into list_jobs BEFORE the dict copy (bug caught:
+  sweep-after-copy made flips invisible); POST /jobs/{id}/report-closed;
+  POST /admin/jobs/{id}/reopen (require_admin). Initial admin 404 bug: mixin
+  searched the ADMIN's job list — fixed with cross-owner resolution.
+- db.py: _posted_days_ago helper (module-level); demo seed postedAt now
+  relative (3/5/8/12/22/30/45/50 days ago) — hardcoded March 2026 dates made
+  the whole demo board stale under the 14-day sweep (gate exposed it).
+  Deadlines still fixed March dates — cosmetic, ledger follow-up.
+- frontend: client.ts reportJobClosed (dual-mode) + types JobStatus/Job.status/
+  JobGates.closedReport + JobDetail.tsx "Report as Closed / Broken Link"
+  (ghost/destructive-subtle, hidden when expired, toast, optimistic setJob).
+- Tests: tests/test_jobs_expiry.py 8 cases (isolated via pro-space twin
+  fixture with restore). QA: backend 45/45 pass; frontend tsc 0, eslint
+  0 errors (19 pre-existing warnings incl. JobDetail max-lines 519>300 —
+  ledger), vitest 52/52, prettier clean.

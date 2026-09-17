@@ -56,4 +56,19 @@ Write verify.py → run pytest (new file) → write router wiring → run full
 backend QA → fill "## Result". Never >1 step unwritten.
 
 ## Result
-(built by — orchestrator fills after disk verification)
+BUILT INLINE by orchestrator 17 Sept 2026 (after 2 builder fast-fail deaths).
+- app/services/verify.py: GateResult, check_page_count (MAXIMUM semantics —
+  deviation from spec "exactly N": repo G5 contract test_compile_page_counts
+  pins profile-driven counts >=1; upstream exact-match applies to fixed
+  templates only), check_layout (hole >100pt, final >35% empty, non-final
+  >25% early), run_document_gates (page_count first).
+- CRITICAL FIX: pypdf visitor tm is page-relative — real y = cm[1]*tm[4] +
+  cm[3]*tm[5] + cm[5] (raw tm[5] gave impossible 133% emptiness on xelatex).
+- STAGED GATE POLICY (product decision, in ledger): page_count = hard 422
+  pre-persistence in fit.py compile; layout = structured
+  verification.layoutGates findings, verificationPassed False, artifacts still
+  delivered — hard layout block is premature until BE-D regenerate loop.
+- tests/test_verify_pages.py: 10 cases incl. pypdf-built engine-free fixtures
+  and router contract tests (422 + non-blocking layout).
+- QA: 38/38 pass (verify+fit+quota), ruff clean on touched files. Full-suite
+  E-errors = pre-existing stale TEST_DATABASE_URL Neon drift (15 Sept baseline).

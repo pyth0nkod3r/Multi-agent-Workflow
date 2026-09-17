@@ -25,3 +25,8 @@ Status:
 - [x] Wave 0 dispatches ×2 DIED (planner+researcher fast-fail, zero disk) → retries -r1 ×2 ALSO DIED → INLINE FALLBACK per protocol
 - [x] 17 Sept ~08:0x — specs + SPIKE research written INLINE by orchestrator (spec-01-BE-B-verify-gates.md, spec-02-BE-E-stale-jobs.md, research-latex-strategy.md — all disk-verified)
 - [ ] Wave 1: builder dispatch (spec-01 + spec-02) — attempt; fallback = inline build
+- [x] Wave 1 builders dispatched ×2 → fast-fail died → INLINE BUILD by orchestrator
+- [x] SPEC-01 BE-B: services/verify.py + fit.py wiring + 10 tests — 45/45 pass, ruff clean. KEY CATCH: pypdf tm is page-relative (cm transform math needed); staged gate policy (page_count hard 422, layout findings) documented
+- [x] SPEC-02 BE-E: mixin (14-day sweep, report-closed, reopen cross-owner) + JobDetail UI + demo seed relative dates + 8 tests. Catches: naive/aware datetime, sweep-after-copy, admin 404, S608 → literal SQL
+- [x] Committed platform f9cf464 (pushed); spec Results filled; ledger + HANDOVER §5 updated
+- [ ] Critic pass (attempt; engine fast-fail likely → inline self-review fallback)

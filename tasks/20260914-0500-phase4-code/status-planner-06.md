@@ -1,0 +1,2 @@
+03-builder-client-methods.md · verified · 2026-09-14T05:05:35Z
+Planner-06 wrote the single spec file covering all missing client methods (~18 new methods + 2 extensions), types.ts additions (10 interfaces + 1 type alias + 1 RankRun field), mock-data.ts extensions (7 mock exports), and mechanical migration of the 3 direct-mock-import pages (Settings, InterviewPrep, Upskill). Method count: 18 new + 2 extended = 20 method changes total.
