@@ -38,3 +38,4 @@ Status:
 - [x] SPEC-05 BE-D: relevance.py cut loop + _gate_and_cut extraction (C901 fix) + CV-layout-hard/cover-staged scoping + render.yaml pre-warm + 6 tests
 - [x] Committed platform f889952 (pushed); spec Results filled; ledger updated (staged policy retired for CV)
 - [ ] Critic attempt (engine fast-fail likely → inline fallback)
+- [x] Wave 2 critic PASS (inline self-verified — 11th fast-fail death; verdict committed)
