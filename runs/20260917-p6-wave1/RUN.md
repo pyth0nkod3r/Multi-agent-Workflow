@@ -31,3 +31,4 @@ Status:
 - [x] Committed platform f9cf464 (pushed); spec Results filled; ledger + HANDOVER §5 updated
 - [ ] Critic pass (attempt; engine fast-fail likely → inline self-review fallback)
 - [x] Critic PASS (inline self-verified — dispatched critic was 8th fast-fail death; verdict committed)
+- [x] Wave 2 session 1 dispatched: builder-BEF-backend (SPEC-03) + builder-BEF-panel (SPEC-04), background concurrent; SPEC-05 (BE-D) gated on session 1
