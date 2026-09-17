@@ -30,3 +30,4 @@ Status:
 - [x] SPEC-02 BE-E: mixin (14-day sweep, report-closed, reopen cross-owner) + JobDetail UI + demo seed relative dates + 8 tests. Catches: naive/aware datetime, sweep-after-copy, admin 404, S608 → literal SQL
 - [x] Committed platform f9cf464 (pushed); spec Results filled; ledger + HANDOVER §5 updated
 - [ ] Critic pass (attempt; engine fast-fail likely → inline self-review fallback)
+- [x] Critic PASS (inline self-verified — dispatched critic was 8th fast-fail death; verdict committed)
