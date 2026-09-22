@@ -5,7 +5,7 @@ apps when active, any new repo). Source of authority for builder/critic/planner
 prompts (roster v4) and wave gating (ORCHESTRATION §B2). Full proposal +
 adoption rationale: /workspace/multiagent/proposals/20260914-code-quality-plan.md.
 
-## The 7 gates (builder floor; critic tags issues by gate number)
+## The 8 gates (builder floor; critic tags issues by gate number)
 
 1. **SINGLE RESPONSIBILITY** — every function does exactly one thing. 'and' test:
    can't describe it without "and" → split (calculateAndSaveInvoice →
@@ -35,6 +35,17 @@ adoption rationale: /workspace/multiagent/proposals/20260914-code-quality-plan.m
    existing convention (research: AI code drifts into non-standard naming).
    Prefer deleting/simplifying over adding when the spec allows — negative LOC
    is real productivity.
+8. **SECURITY-AUDIT BEFORE SUPPRESS** (user-set 22 Sept 2026) — every linter
+   error (ruff, eslint) is a potential zero-day until proven otherwise. BEFORE
+   adding any `# noqa`, per-file-ignore, or `// eslint-disable`: audit the rule
+   against the actual code. Is it a verified false positive (e.g. parameterized
+   SQL flagged as S608 injection, list-form subprocess flagged as S603)? Then
+   suppress WITH an inline comment explaining why. Is it a real vulnerability
+   (hardcoded credentials, unvalidated input, missing scheme check, partial
+   path resolution)? Then FIX IT — do not silence it. Builders: if QA shows a
+   ruff error, you must classify it (false-positive vs real) before your unit
+   can pass. Critics: flag any noqa/per-file-ignore that lacks a justifying
+   comment or that suppresses a rule without verifying it's a false positive.
 
 ## Process rules that make the gates real
 
