@@ -296,3 +296,10 @@ Integration tips:
 - UNVERIFIED: 2 (magicui.design — Cloudflare 403 + connection timeout ×2; uiverse.io — Cloudflare 403 WAF challenge).
 - MOVED: 0 (several apex domains redirect to www: scrolltide, appshot, mapcn, navbar, footer, cta, 404s — canonical URLs use the www form; not counted as moved).
 - Top 5 recommendations: shadcn/ui, DesignMD, Refero Styles, Aceternity UI, Motion Primitives (full top-10 with "how we use it" in Adoption notes above).
+
+## Addendum (27 Sept 2026): designmd CLI integration
+- `designmd` npm CLI installed globally in the workspace rootfs; DESIGNMD_API_KEY persisted in ~/.bashrc.
+- LIVE-VERIFIED: `designmd search "fintech" --json` (MIT-licensed kits w/ preview colors + tags), `designmd tags`, `designmd download chef/crypto-blue -o ./DESIGN.md` → valid DESIGN.md (74 lines).
+- Tool model: search/browse-tags free; get/download/upload/delete need the API key.
+- MCP server (npx designmd-mcp) is stdio-only and mcp.designmd.ai does NOT resolve in DNS (000 from workspace too) — CLI is the sanctioned integration path.
+- 21st.dev MCP (https://mcp.21st.dev/mcp, streamable_http) registered app-side but ERRORED "needs authorization" — requires a 21st.dev API key from the user; workspace resolves the host fine, device DNS was transiently flaky (retry succeeded).
