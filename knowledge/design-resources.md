@@ -303,3 +303,10 @@ Integration tips:
 - Tool model: search/browse-tags free; get/download/upload/delete need the API key.
 - MCP server (npx designmd-mcp) is stdio-only and mcp.designmd.ai does NOT resolve in DNS (000 from workspace too) — CLI is the sanctioned integration path.
 - 21st.dev MCP (https://mcp.21st.dev/mcp, streamable_http) registered app-side but ERRORED "needs authorization" — requires a 21st.dev API key from the user; workspace resolves the host fine, device DNS was transiently flaky (retry succeeded).
+
+## Addendum 2 (27 Sept 2026): 21st MCP connected & live-verified
+- Registered: id bd5ceab0-6dfd-4837-aa3d-fd13e191a888, url https://21st.dev/api/mcp (streamable_http), header x-api-key (user-supplied key).
+- ENDPOINT TRUTH (from 21st-dev/magic-mcp README): mcp.21st.dev is a marketing page serving HTML, not MCP; old Cloud Run endpoint (mcp-842306918693.us-west1.run.app) is dead/rotated; correct = https://21st.dev/api/mcp with x-api-key header (NOT Authorization Bearer).
+- 34 tools synced. Auth verified live: search works, get_usage → Tier free, 2/2 daily component-code retrievals remaining, AI generation NOT enabled (use search + get_component, then adapt with own agent).
+- Usage rules: `search` free metadata; `get_component` = PAID step (2/day free tier) — flagship-first; `get_theme` free full CSS tokens; templates = metadata only.
+- Component install shape: npx shadcn@latest add "https://21st.dev/r/<user>/<slug>?api_key=$API_KEY_21ST".
