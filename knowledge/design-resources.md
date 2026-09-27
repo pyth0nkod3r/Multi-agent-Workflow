@@ -23,11 +23,11 @@
 | 13 | 21st.dev | https://21st.dev | LIVE | P4 P3 | 12k React/Tailwind components, one-command install |
 | 14 | Kinetics | https://kinetics.colorion.co | LIVE | P4 | copy CSS/React, spring physics |
 | 15 | Aceternity UI | https://ui.aceternity.com | LIVE | P4 P3 | 200+ copy-paste React/Tailwind/Motion |
-| 16 | Magic UI | https://magicui.design | UNVERIFIED | P4 | (inferred: open source, copy-paste) |
+| 16 | Magic UI | https://magicui.design | LIVE | P4 | (inferred: open source, copy-paste) |
 | 17 | Motion Primitives | https://motion-primitives.com | LIVE | P4 QA | open-source React/Next/Tailwind UI kit |
 | 18 | Anime.js | https://animejs.com | LIVE | P4 | MIT JS animation lib |
 | 19 | shadcn/ui | https://ui.shadcn.com | LIVE | P4 P3 QA | copy-paste, per-component MIT-style |
-| 20 | Uiverse | https://uiverse.io | UNVERIFIED | P4 QA | (inferred: community CSS snippets) |
+| 20 | Uiverse | https://uiverse.io | LIVE | P4 QA | (inferred: community CSS snippets) |
 | 21 | UIAble | https://uiable.com | LIVE | P4 | open source, Next.js |
 | 22 | MapCN | https://www.mapcn.dev | LIVE | P4 | MapLibre+Tailwind+shadcn map components |
 | 23 | MicroKit | https://microkit.co | LIVE | P4 QA | 49 MIT microinteractions, no install |
@@ -310,3 +310,9 @@ Integration tips:
 - 34 tools synced. Auth verified live: search works, get_usage → Tier free, 2/2 daily component-code retrievals remaining, AI generation NOT enabled (use search + get_component, then adapt with own agent).
 - Usage rules: `search` free metadata; `get_component` = PAID step (2/day free tier) — flagship-first; `get_theme` free full CSS tokens; templates = metadata only.
 - Component install shape: npx shadcn@latest add "https://21st.dev/r/<user>/<slug>?api_key=$API_KEY_21ST".
+
+## Addendum 3 (27 Sept 2026): re-verification + component-install wiring
+- Magic UI (magicui.design) re-verified LIVE via 3rd fetch path ("UI library for Design Engineers"); Uiverse (uiverse.io) re-verified LIVE via device-network fetch ("The Largest Library of Open-Source UI elements" — free copy-paste CSS/Tailwind, open-source GitHub). Both had been UNVERIFIED (workspace fetcher blocked); final count 29/29 live-verified.
+- Phase-4 component-install commands now wired into the ai-design-workflow skill:
+  - shadcn: `npx shadcn@latest add <component-or-url>` (npx-runnable from workspace shell; no global install needed)
+  - 21st: `npx shadcn@latest add "https://21st.dev/r/<user>/<slug>?api_key=$API_KEY_21ST"` (install command returned per search result); get_component for flagship pieces only (2/day free tier), search type:theme + get_theme for free CSS tokens.
