@@ -112,3 +112,10 @@ merged with minimal review); GitClear 150M-LOC churn study; Uplevel 2024
 survey (96% concerned; 67% debug MORE with AI); arXiv 2512.05239 (SLR of bugs
 in AI-generated code, naming/consistency drift). Not adopted: hard line laws
 (5/20/30/40), 79-char as review argument, 20-line targets, error-level day one.
+
+## Gate 9 — SEC (security review, adopted 28 Sept 2026)
+- The critic runs a security checklist on every substantive diff, alongside gates 1-8. Checklists live in knowledge/security-checklists/ (api-security, auth-security, business-logic, code-review, mobile-apk-release) — distilled from elementalsouls/Claude-BugHunter (MIT+CC-BY), DEFENSIVE USE ONLY against our own products, never third parties.
+- Web/API diffs: run api-security.md + auth-security.md items (mass assignment, BOLA/IDOR ownership checks, function-level authz, data exposure, rate limiting, JWT validation). Business-logic changes: demand server-side validation test cases per business-logic.md. Mobile/APK releases: run mobile-apk-release.md as a release gate.
+- CI layer: gitleaks (blocking) + trivy (advisory) + Dependabot run in GitHub Actions (docs/security/README.md in the platform repo). CI findings follow the same rule as gate 8: every finding audited as a potential real vulnerability BEFORE suppression; suppression only for verified false positives with an inline comment.
+- Sensitive info in any artifact shared outside the repo (logs, reports, screenshots) must be redacted per evidence-hygiene practice (cookies, tokens, PII).
+- References: OWASP Top 10 2025, ASVS 5.0, API Security Top 10 (knowledge/security-resources.md).
