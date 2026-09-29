@@ -119,3 +119,6 @@ in AI-generated code, naming/consistency drift). Not adopted: hard line laws
 - CI layer: gitleaks (blocking) + trivy (advisory) + Dependabot run in GitHub Actions (docs/security/README.md in the platform repo). CI findings follow the same rule as gate 8: every finding audited as a potential real vulnerability BEFORE suppression; suppression only for verified false positives with an inline comment.
 - Sensitive info in any artifact shared outside the repo (logs, reports, screenshots) must be redacted per evidence-hygiene practice (cookies, tokens, PII).
 - References: OWASP Top 10 2025, ASVS 5.0, API Security Top 10 (knowledge/security-resources.md).
+
+## Gate 10 — Git-commit provenance
+- Every commit message carries a `[run <runid>]` marker; builders never commit (orchestrator-only commits, serialized single writer); verify-before-fix (re-read target + git log before fixing — never re-apply a reverted fix); orphan commits (no marker) audited before trusted. Enforcement: `.githooks/commit-msg` (wire per-clone via `git config core.hooksPath .githooks`).
