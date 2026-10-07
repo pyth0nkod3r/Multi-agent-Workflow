@@ -316,3 +316,15 @@ Integration tips:
 - Phase-4 component-install commands now wired into the ai-design-workflow skill:
   - shadcn: `npx shadcn@latest add <component-or-url>` (npx-runnable from workspace shell; no global install needed)
   - 21st: `npx shadcn@latest add "https://21st.dev/r/<user>/<slug>?api_key=$API_KEY_21ST"` (install command returned per search result); get_component for flagship pieces only (2/day free tier), search type:theme + get_theme for free CSS tokens.
+
+## Addendum 4 (7 Oct 2026): two GitHub-based design resources
+| # | Name | URL | Status | Phase tags | License |
+|---|------|-----|--------|-----------|---------|
+| 30 | Awesome Design | https://github.com/gztchan/awesome-design | LIVE (stale — last push 2024-07) | P1 P2 | no SPDX license field (custom); curated links only |
+| 31 | Awesome Design MD | https://github.com/VoltAgent/awesome-design-md | LIVE (very active — push 2026-10-05) | P3 P4 | MIT |
+
+### 31 Awesome Design MD (VoltAgent/awesome-design-md) — VERIFIED IN DEPTH
+- 119.9k stars; ~100+ top-brand DESIGN.md analysis files under design-md/<brand>/DESIGN.md (+README.md per brand): airbnb, apple, airtable, binance, bmw, bugatti, etc.
+- Sampled airbnb/DESIGN.md (545 lines): REAL token sets — colors (hex + usage), typography, shape/rounding, spacing — machine-readable, raw-downloadable: `curl -sS https://raw.githubusercontent.com/VoltAgent/awesome-design-md/main/design-md/<brand>/DESIGN.md`.
+- USE: Phase-3 DESIGN.md fuel alongside designmd.ai (designmd = community kits; VoltAgent = TOP-BRAND analysis). A designer picks the adjacent brand, we download its DESIGN.md as the scaffold, adapt tokens to the project's brand, and feed the result to Stitch create_design_system + the code surface. Also useful as critic reference: "does our spacing/type hierarchy hold up vs the brand we chose?"
+- 30 (gztchan/awesome-design): general curated-links list, stale since 2024 — use only for P1 browsing; prefer the 29-site library + VoltAgent for fuel.
