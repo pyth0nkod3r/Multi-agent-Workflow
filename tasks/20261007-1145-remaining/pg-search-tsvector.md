@@ -69,3 +69,50 @@ PLAN:
   disk state is the source of truth.
 - Committed as an explicit partial checkpoint [run 20261007-1145-remaining]; test completion is
   the queued next step before 020 ships to Neon.
+
+## Result (builder r3, disk-verified 7 Oct — supersedes the "NOT DONE: step 3" note above)
+DONE 4/4 criteria. THE TESTS NOW EXIST AND ARE GREEN ON LIVE NEON.
+1. backend/migrations/020_job_search_index.sql (new): CREATE SCHEMA IF NOT EXISTS public +
+   CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public (verified against the 015 pgvector
+   precedent — survives per-run test-schema drops) + jobs_search_en_idx GIN on to_tsvector(
+   'english', coalesce(title,'')||' '||coalesce(description,'')) + jobs_search_trgm_idx GIN
+   gin_trgm_ops on the same concat. Immutability proven by successful CREATE INDEX on fresh live
+   schemas; cross-schema re-application (extension already in public) verified idempotent live.
+2. Search clause lives in app/pg_board.py (DEVIATION from the owned-file list: db_pg.jobs_for is
+   a thin facade delegating to pg_core←pg_board since the shared-board split — pg_board IS the
+   search path the spec means). Verify-before-fix finding: the q-filter + 'simple' search_vec GIN
+   ALREADY EXISTED (migration 005 + 10-5) — the q-branch is now a 3-branch OR SUPERSET: the 10-5
+   clause untouched byte-identical, + 'english' stemmed branch (serves jobs_search_en_idx), +
+   trgm ILIKE branch (serves jobs_search_trgm_idx) with wildcard-escaped _ilike_pattern (%/_/\,
+   bound param — gate-8 wildcard-injection guard). q absent/'' ⇒ else branch ⇒ default SQL
+   byte-identical to pre-020 (pinned by test). Router cache_key already includes q.
+3. tests/test_pg_job_search_020.py (new, LIVE, scoped): 6/6 GREEN sequential — 020 roundtrip
+   (extension + both indexes registered), EXPLAIN planner-usability (enable_seqscan=off — proves
+   the query expression EXACTLY matches the indexed one), byte-identical no-op parity (SQL+params
+   equality across omitted/None/''), title-word + description-word matches, english stemming
+   ("engineers" hits "Engineer"), trgm fuzzy ("perience" mid-word), gibberish-empty, '%' escapes
+   to zero rows, tier+LIMIT/OFFSET contracts (total=1, offset page). Regressions GREEN against
+   shipped code: test_pg_search_overlay.py 4/4 (10/10 combined run) + parity suites 6/6.
+   LESSON: two CONCURRENT PG pytest processes race — the second conftest's orphan-drop wiped the
+   first's live schema mid-run (false UndefinedTable failures). PG suites: ONE pytest process at a
+   time, sequential.
+4. ZERO importer changes; files: migration (new) + pg_board.py + test file (new) only. Mock path
+   untouched. NOT YET: 020 against the PRODUCTION schema (deploy step = orchestrator's, per the
+   checkpoint note above — migrations land via the normal deploy path, proven idempotent).
+QA: ruff check clean (both touched .py); new test file ruff-format clean; pg_board left in the
+repo's pre-existing format drift (HEAD fails ruff format at 74ce22f too — not reformatted, patch
+discipline; additions follow surrounding style).
+Gate-compliance: gates 1/2/3/5/6/7 clean; gate 4 justified (SQL rides the existing _fetchall/
+_fetchone boundary; no new I/O surface); gate 8 audited (S608 = constant fragments only, all user
+input bound-parameter incl. the ILIKE pattern, wildcards escaped, extension create follows the 015
+public-schema root-cause guard). Did NOT verify: full hermetic mock suite (mock path untouched;
+parity + overlay suites green instead). Rating 9/10 — gap: full mock suite not re-run.
+needs commit: backend/tests/test_pg_job_search_020.py (untracked; migration+pg_board deltas since
+c9d941c = the 020 extension-fix if not already in that commit — verify at commit time)
+[run 20261007-1145-remaining].
+
+ORCHESTRATOR CLOSE-OUT (7 Oct 2026 ~14:45): scoped LIVE test run by the orchestrator —
+`uv run pytest tests/test_pg_job_search_020.py -q` → **6 passed in 26.27s (LIVE vs Neon)**.
+Migration 020 + pg_board q-search = c9d941c (PARTIAL marker superseded); the test file committed
+afterwards with [run 20261007-1145-remaining]. **UNIT COMPLETE.** Known-debt note: the 9/10 gap
+(full hermetic mock suite not re-run) stands — mock path untouched by this unit.
