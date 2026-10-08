@@ -1,35 +1,46 @@
-# Smoke PASS — smoke-20261007
+# runs/smoke-20261007 — SMOKE PASS (Hermes harness port)
 
-**Date:** 7 Oct 2026 · **Harness:** Hermes Agent v0.21.5 (Windows, desktop) · **Result:** PASS
-
-This run verifies the Multi-Agent Workflow port (pyth0nkod3r/Multi-agent-Workflow
-+ Universal-IDE-Setup mirror) works on the Hermes harness.
+Run: smoke-20261007 | Protocol: ORCHESTRATION §E, Hermes-adapted | Date: 2026-10-07
+Harness: Hermes Agent (desktop, Windows). Dispatch channel: `delegate_task`
+(RikkaHub `subagent_dispatch` equivalent); role prompts injected from
+roster/builder.md v4 (condensed) into each child's context.
 
 ## What ran
+1. **Scaffold-first**: `tasks/smoke-20261007/` (RUN.md + 3 self-contained specs)
+   written to disk BEFORE any dispatch. RUN.md used as write-ahead log.
+2. **Wave 1 — fan-out**: 3 builders in ONE parallel dispatch
+   (sa-0-ce66a052, sa-1-f0012ccc, sa-2-e8977a8d), results delivered between
+   turns (background handoff replaces the watchdog `schedule_job` — no cron
+   needed on this harness).
+3. **Collect — disk verification (SUCCEEDED ≠ done)**: orchestrator recomputed
+   independently: 17×23=391, 2¹²−1=4095, Σprimes<30=129. All three out-*.md
+   files on disk with exact correct content; all `## Result` placeholders
+   replaced; zero unfilled placeholders.
+4. **Wave 2 — blind critic** (sa-0-b0a3c4c9): given only spec+output paths,
+   no builder identities. Verdict **PASS**; full report + verification table
+   landed at `tasks/smoke-20261007/CRITIC.md` (3543 B, read back from disk per
+   critic v5 disk-report rule). Issues: 2 × note, 0 blockers.
+5. **Merge**: this file. Critic Issue 1 (H1 copy-paste headers in specs 02/03
+   — orchestrator-side scaffold bug) fixed before the commit; correction
+   logged in RUN.md (pre-commit fix, no history rewrite).
 
-| Unit | Dispatch | Result |
-|---|---|---|
-| builder-01 (17×23) | delegate_task, 3-wide parallel wave | out-01.md `computed: 391` ✓ |
-| builder-02 (2^12−1) | delegate_task, 3-wide wave → **FAILED** (HTTP 429, 15 req/min provider cap, 59.9s) → re-dispatch r1 solo | out-02.md `computed: 4095` ✓ |
-| builder-03 (primes<30) | delegate_task, 3-wide parallel wave | out-03.md `computed: 129` ✓ |
-| critic (blind) | delegate_task, after all units disk-verified | Verdict: PASS, 0 issues — CRITIC.md |
+## Verdict
+**PASS** — 3/3 units correct + disk-verified, blind critic PASS with no
+blockers, RESULT-LAST and checkpoint discipline observed by all workers.
 
-## Verification performed
+## Harness translation lessons (ported protocol → Hermes)
+- `delegate_task` background handoff = watchdog replacement: results re-enter
+  the conversation as messages; orchestrator ends the turn after dispatch,
+  never polls transcripts.
+- Children are context-isolated and cannot ask the user questions — "return
+  blocked in ## Result" must be stated in every role context block.
+- RikkaHub's "system_prompt ignored" quirk does NOT apply here: roster prompt
+  bodies go into the child's `context` field and work.
+- Watchdog `schedule_job` (§A step 4) is optional on Hermes; next-message
+  recovery scan remains mandatory and fired once during this run (correctly
+  found the in-flight critic, took no action).
 
-- Orchestrator recomputed all three results via Python: 391, 4095, 129 — all match.
-- Every output file read from disk: exact 3-line format, correct values.
-- All three spec `## Result` placeholders replaced by the builders (RESULT-LAST held).
-- Blind critic independently recomputed all three and verified formats (CRITIC.md,
-  read back from disk — full verification table, 9/9 checks PASS).
-
-## Lessons recorded during this run
-
-1. **429 rate limit**: the provider caps at 15 req/min; 3 parallel delegate_task
-   children + the parent session can trip it. Keep waves ≤2 wide, stagger, or
-   re-dispatch failed units after the wave drains (protocol re-dispatch worked).
-2. **Roster prepend mapping works**: children received the roster body in their
-   `context` field and followed it (zero-fluff output, RESULT-LAST, Result fills).
-3. **`hermes mcp add` interactive save breaks over a pty** — non-interactive
-   `hermes config set mcp_servers.<name>.url ... --force` is the reliable path.
-4. **Git identity was unset on this machine** — set repo-local from the repo's
-   own provenance (pyth0nkod3r, noreply email) before any orchestrator commit.
+## Artifacts
+- tasks/smoke-20261007/: 0{1,2,3}-builder.md (specs + filled ## Result),
+  out-0{1,2,3}.md, CRITIC.md, RUN.md (full audit trail)
+- Commit: `[run smoke-20261007]` — this run + knowledge/README.md index fix

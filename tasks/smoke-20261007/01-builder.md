@@ -1,26 +1,24 @@
-# Task 01 — Builder (smoke test, Hermes harness)
+# 01-builder — smoke arithmetic unit (01)
+Run: smoke-20261007 | Role: builder | Harness: Hermes
 
-## Context
-You are one of three parallel builders in a system smoke test on a new harness
-(Hermes Agent, Windows). You have file tools. Work only from this file; you have
-no other conversation context.
+[CONTEXT] This is a smoke test of the multi-agent protocol ported to the Hermes
+harness. Repo root: C:/Users/ZION/repos/Multi-agent-Workflow. You work alone;
+no conversation with the parent — all reporting through files on disk.
 
-## Deliverable
-1. Compute 17 × 23.
-2. Write the result to `C:/Users/D3V_001/repos/Multi-agent-Workflow/tasks/smoke-20261007/out-01.md`
-   using exactly this format:
+[DELIVERABLE] Compute product of 17 and 23 = 17*23. Use a real computation (terminal/python),
+not mental math.
 
-```
-# Smoke output 01
-role: builder
-computed: <the number>
-```
+[OUTPUT PATH] C:/Users/ZION/repos/Multi-agent-Workflow/tasks/smoke-20261007/out-01.md
+Content: the role name (builder) and the result, one short file, e.g.:
+builder: <result>
 
-## Done criteria
-`out-01.md` exists with the correct value in the `computed:` line, and the
-`## Result` block below is REPLACED in THIS file.
+[DONE CRITERIA] out-01.md exists on disk with the correct numeric result.
+
+[QUALITY] Gates 1-8 from knowledge/code-quality.md: N/A — this unit computes a
+number and writes one file; no code is produced. Named explicitly, not silent.
 
 ## Result
-status: done. Computed 17 × 23 = 391 (via Python) and wrote
-C:/Users/D3V_001/repos/Multi-agent-Workflow/tasks/smoke-20261007/out-01.md in the exact
-required format (verified by read-back: `computed: 391`). No deviations.
+status: done. Produced tasks/smoke-20261007/out-01.md containing "builder: 391";
+17*23 computed via python3 (391), verified against the written file.
+Deviations: none. Rating: 10/10 — out-01.md exists on disk with the correct
+numeric result. Gates 1-8 N/A, no code produced.

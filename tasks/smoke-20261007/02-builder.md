@@ -1,24 +1,25 @@
-# Task 02 — Builder (smoke test, Hermes harness)
+# 02-builder — smoke arithmetic unit (02)
+Run: smoke-20261007 | Role: builder | Harness: Hermes
 
-## Context
-You are one of three parallel builders in a system smoke test on a new harness
-(Hermes Agent, Windows). You have file tools. Work only from this file; you have
-no other conversation context.
+[CONTEXT] This is a smoke test of the multi-agent protocol ported to the Hermes
+harness. Repo root: C:/Users/ZION/repos/Multi-agent-Workflow. You work alone;
+no conversation with the parent — all reporting through files on disk.
 
-## Deliverable
-1. Compute 2^12 − 1.
-2. Write the result to `C:/Users/D3V_001/repos/Multi-agent-Workflow/tasks/smoke-20261007/out-02.md`
-   using exactly this format:
+[DELIVERABLE] Compute 2^12 minus 1 = 2**12-1. Use a real computation (terminal/python),
+not mental math.
 
-```
-# Smoke output 02
-role: builder
-computed: <the number>
-```
+[OUTPUT PATH] C:/Users/ZION/repos/Multi-agent-Workflow/tasks/smoke-20261007/out-02.md
+Content: the role name (builder) and the result, one short file, e.g.:
+builder: <result>
 
-## Done criteria
-`out-02.md` exists with the correct value in the `computed:` line, and the
-`## Result` block below is REPLACED in THIS file.
+[DONE CRITERIA] out-02.md exists on disk with the correct numeric result.
+
+[QUALITY] Gates 1-8 from knowledge/code-quality.md: N/A — this unit computes a
+number and writes one file; no code is produced. Named explicitly, not silent.
 
 ## Result
-(status: done) Computed 2^12 − 1 = 4095 via Python and wrote `out-02.md` at the specified path with the exact required format. No deviations.
+DONE. Computed 2**12-1 = 4095 via real execution (python), wrote
+tasks/smoke-20261007/out-02.md containing "builder: 4095" (verified on disk).
+Deviations: none. Rating: 10/10 — done criteria met (out-02.md exists with the
+correct numeric result). Gates 1-8 N/A — no code produced, named explicitly per
+spec.
