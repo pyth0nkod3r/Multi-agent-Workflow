@@ -328,3 +328,15 @@ Integration tips:
 - Sampled airbnb/DESIGN.md (545 lines): REAL token sets — colors (hex + usage), typography, shape/rounding, spacing — machine-readable, raw-downloadable: `curl -sS https://raw.githubusercontent.com/VoltAgent/awesome-design-md/main/design-md/<brand>/DESIGN.md`.
 - USE: Phase-3 DESIGN.md fuel alongside designmd.ai (designmd = community kits; VoltAgent = TOP-BRAND analysis). A designer picks the adjacent brand, we download its DESIGN.md as the scaffold, adapt tokens to the project's brand, and feed the result to Stitch create_design_system + the code surface. Also useful as critic reference: "does our spacing/type hierarchy hold up vs the brand we chose?"
 - 30 (gztchan/awesome-design): general curated-links list, stale since 2024 — use only for P1 browsing; prefer the 29-site library + VoltAgent for fuel.
+
+## Addendum 5 (16 Oct 2026): Hallmark — anti-AI-slop design skill (INSTALLED as a skill)
+| # | Name | URL | Status | Phase tags | License |
+|---|------|-----|--------|-----------|---------|
+| 32 | Hallmark (Nutlope) | https://github.com/nutlope/hallmark | LIVE (push 2026-08-06) | P2 P3 P4 QA | MIT |
+
+### 32 Hallmark — VERIFIED IN DEPTH, INSTALLED
+- 30.2k★; "A design skill for Claude Code/Cursor/Codex that refuses to look AI-generated" (Together AI). Encodes anti-slop rules from Anthropic's frontend-design skill + 2026 "tactile rebellion" consensus.
+- **Four verbs**: default (build new UI w/ macrostructure + 21 themes + 57 slop-test gates + pre-emit self-critique), `hallmark audit <target>` (score existing code vs anti-patterns → punch list, no edits), `hallmark redesign <target>` (keep copy/IA/brand, rebuild visual structure w/ different fingerprint), `hallmark study <screenshot|URL>` (extract design DNA → diagnosis → optional portable design.md; refuses pixel-clones + template-marketplace URLs).
+- 21 macrostructures (bento-grid, long-document, marquee-hero, workbench, manifesto, specimen, catalogue…), 21 themes, ~60 component archetypes under references/ (heroes, footers, navs, features, testimonials), per-genre rulebooks (modern-minimal, editorial, atmospheric, playful).
+- INSTALL STATE: SKILL.md (67.4KB, single-line frontmatter, native format) installed via skill_install_from_url + full references/ tree mirrored (107 files, 973K) at /skills/hallmark/. **ENABLED FLAG STUCK AT FALSE** despite install response auto_enabled:true — use_skill returns skill_not_enabled; needs the manual Settings > Assistants > Skills toggle (user action, same class as the 11 Sept neon skills). Re-test use_skill after the toggle.
+- USE once enabled: (a) Phase-2/3 generation with slop-gates; (b) `hallmark audit` as a CRITIC input for the EaseApply landing polish; (c) `hallmark study` on competitor sites for direction briefs (own-brand attestation required for design.md emission); (d) `hallmark redesign` for the queued UI redesign.
