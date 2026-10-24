@@ -20,3 +20,4 @@ Later runs reference files here instead of re-researching.
 | google-jobs-portal.md | Google Jobs portal scraping facts | — |
 | testgorilla-upskill.md | TestGorilla upskill notes | — |
 | research-doctrine.md | Research pipeline doctrine v1.0 (scoping → no-anchoring dispatch → escalation ladder → per-claim ADOPT/VERIFY/REJECT → artifacts → absorption) + academic/non-academic source maps — user-adopted 2026-10-24 | 2026-10-24 |
+| security-adoptions.md | Security standing doctrine v1.0: gate 8 zero-day audit, gate 9 SEC (critic-as-security-agent), knowledge base + checklists inventory, offensive-material rule, CI trio (gitleaks/trivy/dependabot), secrets discipline, agent-surface hardening | 2026-10-24 |
