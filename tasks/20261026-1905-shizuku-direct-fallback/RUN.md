@@ -39,3 +39,27 @@ HyperOS V816, Android 16), where Shizuku's user-service process dies at start-up
 ## Ledger
 
 - 2026-10-26 19:05 — specs written to disk, both units dispatched in background.
+- 2026-10-26 19:12 — builder attempt 1 (profile default model): SUCCEEDED, 0 trips, empty result, zero
+  disk changes → false success (known engine failure mode).
+- 2026-10-26 19:15 — builder attempt 2: FAILED before starting, `model_id "glm-5.2"` ambiguous across
+  3 providers. Full model catalogue obtained (see below).
+- 2026-10-26 19:17 — builder attempt 3 (glm-5.2 / Kiosapi-Discount uuid): SUCCEEDED, 0 trips, empty
+  result, zero disk changes → false success.
+- 2026-10-26 19:22 — builder attempt 4: FAILED before starting, `model_id "deepseek"` matched no model.
+  Catalogue listed; native Intern-ai / Codecraftapi UUIDs preferred over custom OpenAI-compatible
+  providers (id 22: custom-provider sub-agent paths cannot execute local workspace tools).
+- 2026-10-26 19:25 — builder attempt 5 (glm-5.3 / Intern-ai uuid 6e75a2f5): RUNNING (taking trips).
+- Doctrine (knowledge/research-doctrine.md §2): reinject the same unit; go inline only after SEVEN
+  failures of the same unit.
+
+## Build facts established while the units run
+
+- AGP **9.3.1**, `buildTypes { release { optimization { enable = true } } }` → release builds DO run R8
+  + resource shrinking. The reflective `Shizuku.newProcess` (private, reflectively called only)
+  therefore needs a keep rule, or R8 removes it and release builds fail while debug builds work.
+- Keep rules are NOT in a `proguard-rules.pro`: AGP 9.3+ uses `app/src/main/keepRules/*.keep`.
+  The repo already has `app/src/main/keepRules/rikkahub.keep` (122 lines, `-dontobfuscate` globally,
+  and an existing Shizuku block keeping `ShizukuUserService`'s reflectively-invoked constructor).
+- `me.rerere.rikkahub.data.ai.tools.local.BoundedOutputStream` lives in `SshTool.kt` (internal).
+- `ShizukuTool.kt` → `ShizukuManager.exec(context, command, timeoutMs)` → JsonObject → rendered as
+  the tool's text result, so a `transport` field in the JSON reaches the agent with no tool changes.
