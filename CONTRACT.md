@@ -57,7 +57,7 @@ to the user with the best attempt + the specific unresolved issues. No infinite 
 
 Each role = a system prompt + a fixed output format. The canonical prompt text
 lives in `roster/<role>.md` and is deployed as a RikkaHub **sub-agent profile**
-(see PROFILES.md). Dispatch by name: `subagent_dispatch(agent="builder", ...)`.
+(see PROFILES.md). Dispatch by name: `subagent_dispatch(agent="builderz", ...)`.
 NEVER pass `system_prompt` per dispatch — the engine ignores it (verified in
 SubAgentEngine.kt). One-off personas that don't merit a profile put their role
 rules inline in the task text instead.
@@ -74,7 +74,7 @@ rules inline in the task text instead.
   (context, deliverable, path to write, done criteria). Numbered `<NN>-<role>.md`.
 - Hard rule: plans only — never implements.
 
-### builder
+### builderz
 - Scope: implement exactly one task spec. Tools: workspace tools (+ shell if needed).
 - Output: written to the path the spec names, plus a `## Result` block REPLACING the
   placeholder in the task file: status (done/blocked), what was produced, deviations

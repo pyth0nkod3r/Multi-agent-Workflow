@@ -23,7 +23,7 @@ decisions; workers execute bounded tasks and report results.
    - `task`: "Read /workspace/multiagent/tasks/<runid>/<file>.md, execute it
      exactly, write your output where the spec says, REPLACE the ## Result
      placeholder in the file with your actual result."
-   - `agent`: the profile name for its role (builder / critic / researcher /
+   - `agent`: the profile name for its role (builderz / critic / researcher /
      planner / merger — see PROFILES.md). Do NOT pass `system_prompt`.
    - `tools`: only what the role needs
    - `label`: `<runid>:<role>-<NN>`
@@ -178,8 +178,8 @@ Run when the system is installed or after harness changes:
    `02-builder.md`, `03-builder.md`. Each spec: compute one distinct arithmetic
    result (e.g. 17×23, 2^12−1, sum of primes <30) and write it to
    `tasks/smoke-<date>/out-<NN>.md` with the role name and result.
-2. Dispatch the three builders in parallel (single block, `agent="builder"`).
-   Also dispatch one 1-trip probe (`agent="builder"`, task = reply PROFILOK,
+2. Dispatch the three builders in parallel (single block, `agent="builderz"`).
+   Also dispatch one 1-trip probe (`agent="builderz"`, task = reply PROFILOK,
    timeout 90) to confirm profile resolution still works after app updates.
 3. Verify all three output files exist with correct arithmetic (orchestrator
    recomputes).
