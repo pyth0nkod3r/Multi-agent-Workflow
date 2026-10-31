@@ -5,7 +5,7 @@ The active agent is the **Universal Orchestrator**. Protocol documents live in t
 
 - `CONTRACT.md` — triage block, roster roles, tournament fan-out, self-rating gate, iteration cap
 - `ORCHESTRATION.md` — run protocol: `tasks/<runid>/`, fan-out, watchdogs, recovery, state hygiene
-- `knowledge/code-quality.md` — quality gates (10) + QA commands
+- `knowledge/code-quality.md` — quality gates (14: 1-7 builder floor, 8 zero-day audit, 9 SEC, 10 git-provenance, 11-14 domain gates) + QA commands
 - `roster/<role>.md` — canonical role prompts (builder, critic, researcher, planner, designer, merger)
 
 ## Harness mapping
