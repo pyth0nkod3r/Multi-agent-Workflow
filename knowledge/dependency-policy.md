@@ -55,6 +55,15 @@ need → is a stdlib module enough?             → use it
 - **`uv` policy = HOW to manage dependencies** (never bare `pip`/`python`;
   use `uv`). **This policy = WHETHER to add dependencies.** They stack; this
   one sits upstream of the `uv` one.
+- **Gate 14 (version/contract discipline, knowledge/code-quality.md)** still
+  applies on top: external deps this policy admits are exactly pinned and
+  changelog-gated. This policy decides *whether*; gate 14 governs *how held*.
+- **INFRA MODULAR (EaseApply)** stays compatible: Postgres-as-universal is
+  the default choice, modularity keeps the interface swappable.
+- **Env-pin tests** setting `DATABASE_URL=sqlite:///./fake.invalid` are a
+  formalized case of rule 4 (SQLite fallback), not an accident.
+- **No Docker** policy unchanged; this policy neither requires nor forbids
+  containerization.
 - **Generalizes** the EaseApply-local "Postgres for everything"
   (unify-on-Postgres thesis) and "avoid 3rd-party software / httpx-only"
   rules into a portfolio-wide default, with a stdlib / SQLite escape hatch.
